@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gallery</title>
+  <title>gallery</title>
 
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="archive-style.css">
@@ -76,7 +76,7 @@
         foreach ($rows as $row) {
           $imagePath = $row["image_path"];
           $thumbnailPath = $row["thumbnail_path"];
-          echo "<a class=\"image-link\" href=\"${imagePath}\" target=\"_blank\"> <img src=\"${thumbnailPath}\"> </a>";
+          echo "<a class=\"image-link\" href=\"$imagePath\" target=\"_blank\"> <img src=\"$thumbnailPath\"> </a>";
         }
       } else {
         echo "0 images found :(";
@@ -90,43 +90,35 @@
     <div class="gallery-pagination">
       <?php
         if ($maxPage > 1) {
-          $url = "${basePath}gallery.php?directory=${directory}&imagesPerPage=${imagesPerPage}&page=";
+          $url = "${basePath}gallery.php?directory=$directory&imagesPerPage=$imagesPerPage&page=";
           
           // Determine start and end for numbered page links
           $start = $page - 2 < 1 ? 1 : $page - 2;
           $end = $page + 2 > $maxPage ? $maxPage : $page + 2;
 
-          // First page
+          // First and previous page
           if ($page != 1) {
             echo "<a href='${url}1'>&lt;&lt;</a>";
-          }
-
-          // Previous page
-          if ($page > 1) {
             $prev = $page - 1;
-            echo "<a href='${url}${prev}'>&lt;</a>";
+            echo "<a href='$url$prev'>&lt;</a>";
           }
 
           // Current and surrounding pages
           for ($i = $start; $i <= $end; $i++) {
-            $pageNum = strlen((string) $i) < 2 ? "0${i}" : $i;
+            $pageNum = strlen((string) $i) < 2 ? "0$i" : $i;
 
             if ($i == $page) {
-              echo "<p>${pageNum}</p>";
+              echo "<p>$pageNum</p>";
             } else {
-              echo "<a href='${url}${i}'>${pageNum}</a>";
+              echo "<a href='$url$i'>$pageNum</a>";
             }
           }
 
-          // Next page
+          // Next and last page
           if ($page < $maxPage) {
             $next = $page + 1;
-            echo "<a href='${url}${next}'>&gt;</a>";
-          }
-
-          // Last page
-          if ($page != $maxPage) {
-            echo "<a href='${url}${maxPage}'>&gt;&gt;</a>";
+            echo "<a href='$url$next'>&gt;</a>";
+            echo "<a href='$url$maxPage'>&gt;&gt;</a>";
           }
         }
       ?>
@@ -139,9 +131,9 @@
           <?php
             foreach ($validDirectories as $dir) {
               if ($dir == $directory) {
-                echo "<option selected value=\"${dir}\">${dir}</option>";
+                echo "<option selected value=\"$dir\">$dir</option>";
               } else {
-                echo "<option value=\"${dir}\">${dir}</option>";
+                echo "<option value=\"$dir\">$dir</option>";
               }
             }
           ?>
