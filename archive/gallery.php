@@ -11,15 +11,17 @@
 <body>
   <div class="gallery">
     <?php
+      // $basePath = "https://holedigging.club/archive/";
+      $basePath = "http://localhost/holedigging.club/archive/";
       $defaultImagesPerPage = 15;
       $validDirectories = array("artbook", "colours", "edits", "pics", "fanart", "misc", "screencaps");
-      $directory = $_POST['directory'] ?? $_GET['directory'];
+      $directory = $_POST['directory'] ?? $_GET['directory'] ?? "pics";
 
       if (!in_array($directory, $validDirectories)) {
         $directory = $validDirectories[0];
       }
 
-      $pdo  = new PDO('sqlite:/var/www/holedigging/growing-potato/archive/archive.db') or die("cannot open the database");
+      $pdo = new PDO("sqlite:archive.db") or die("cannot open the database");
 
       // Get number of images in specified directory
       $stmt = $pdo->prepare("SELECT COUNT(*) AS totalImages FROM archive WHERE image_path LIKE '%images/' || ? || '/%'");
@@ -87,7 +89,7 @@
     <div class="gallery-pagination">
       <?php
         if ($maxPage > 1) {
-          $url = "https://holedigging.club/archive/gallery.php?directory=${directory}&imagesPerPage=${imagesPerPage}&page=";
+          $url = "${basePath}gallery.php?directory=${directory}&imagesPerPage=${imagesPerPage}&page=";
           
           // Determine start and end for numbered page links
           $start = $page - 2 < 1 ? 1 : $page - 2;
@@ -129,7 +131,7 @@
       ?>
     </div>
 
-    <form method="POST" action="https://holedigging.club/archive/gallery.php" class="gallery-options">
+    <form method="POST" action="<?php echo $basePath; ?>gallery.php" class="gallery-options">
       <div>
         <label for="directory">Gallery</label>
         <select name="directory">
